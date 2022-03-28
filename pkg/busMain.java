@@ -20,6 +20,7 @@ public class busMain {
 		ArrayList<busStopTimes> stopTimes = new ArrayList<busStopTimes>();
 		ArrayList<busTransfers> transfers = new ArrayList<busTransfers>();
 		BufferedReader reader = null;
+		
 			 try
 			 {
 				reader = new BufferedReader(new FileReader("C:\\Users\\35387\\git\\finalAssignment\\pkg\\stops.txt"));
@@ -32,13 +33,16 @@ public class busMain {
 	            	String [] line = scanner.nextLine().split(",");
 	            	//for (int i = 0; i < line.length; i++)
 	            	//{
-	            		String lineID = (line[1]);
+	            		//String lineID = (line[1]);
 	            	//}
 	    			int stopID = Integer.parseInt(line[0]);
 	    			//System.out.print(stopID);
 	    			//System.out.println(line[1]);
-	    			int stopCode = Integer.parseInt(lineID);
-	    			String stopName = line[2];
+	    			//System.out.println(lineID);
+	    			//int stopCode = Integer.parseInt(lineID);
+	    			String unsortedName = line[2];
+	    			String stopName = renameAddress(unsortedName);
+	    			System.out.print(stopName);
 	    			String stopDesc = line[3];
 	    			double stopLat = Double.parseDouble(line[4]);
 	    			double stopLon = Double.parseDouble(line[5]);
@@ -46,10 +50,10 @@ public class busMain {
 	    			String stopURL = line[7];
 	    			int stopLocType = Integer.parseInt(line[8]);
 	    			int stopParZone = 0;
-	    			stops.add(new busStops(stopID, stopCode, stopName, stopDesc, stopLat, stopLon, 
-	    					stopZone, stopURL, stopLocType, stopParZone));
-	    			insertionSort(stops);
-	    			System.out.print(stopID);
+	    			//stops.add(new busStops(stopID, stopCode, stopName, stopDesc, stopLat, stopLon, 
+	    					//stopZone, stopURL, stopLocType, stopParZone));
+	    			//insertionSort(stops);
+	    			//System.out.print(stopID);
 	    		}
 		}
 		
@@ -57,9 +61,9 @@ public class busMain {
 		{
 			System.out.print("hello");
 		}
-	            
+	          
 		
-		/*	 
+		
 		try
 		{
 			reader = new BufferedReader(new FileReader("C:\\Users\\35387\\git\\finalAssignment\\pkg\\stop_times.txt"));
@@ -71,12 +75,12 @@ public class busMain {
 	    		{	
 	    			int tripID = Integer.parseInt(line[0]);
 	    			String TimeInString = line[1];
-	    			String timeArriv = timeCheck(line[2])
+	    			String timeArriv = timeCheck(line[2]);
 	  				if (timeArriv != null)
 	  				{
 	    				LocalTime arrivalTime = LocalTime.parse(timeArriv);		
 					
-						String timeDep = timeCheck(line[3])
+						String timeDep = timeCheck(line[3]);
 	  					if (timeDep != null)
 	  					{
 	    					LocalTime departureTime = LocalTime.parse(timeDep);		
@@ -87,12 +91,13 @@ public class busMain {
 	    					int dropOffType = Integer.parseInt(line[7]);
 	    					double distTrav = Double.parseDouble(line[8]);	
 	    					stopTimes.add(new busStopTimes(tripID, arrivalTime, departureTime, stopID,
-	    							stopSeq, stopHead, pickUpType, dropOffType,distTrav))
+	    							stopSeq, stopHead, pickUpType, dropOffType,distTrav));
 	    			}
 	    		}
 	    		
 	    	}
-		}
+		
+	    	}}
 		catch(FileNotFoundException e)
 		{
 			System.out.print("Hi");
@@ -104,20 +109,20 @@ public class busMain {
 			scanner.nextLine();
             while (scanner.hasNextLine())
 	    	{
-	    		String [] line = scanner.nextLine().split(",");
+	    		String [] line = scanner.nextLine().split(",");	
+	    		int fromStopID = Integer.parseInt(line[0]);
+	    		int toStopID = Integer.parseInt(line[1]);
+	    		int transferType = Integer.parseInt(line[2]);
+	    		int minTranTime;
+	    		if (line.length == 3)
 	    		{	
-	    			int fromStopID = Integer.parseInt(line[0]);
-	    			int toStopID = Integer.parseInt(line[1]);
-	    			int transferType = Integer.parseInt(line[2]);
-	    			String TimeInString = line[3];
-	    			String minTranTime1 = timeCheck(line[2])
-	  				if (minTranTime1 != null)
-	  				{
-	    				LocalTime minTranTime = LocalTime.parse(minTranTime1);		
-	    				transfers.add(new busTransfers(fromStopID,toStopID, transferType, minTranTime));
-	    			}
+	    			minTranTime = 0; 	
 	    		}
-	    		
+	    		else
+	    		{
+	    			minTranTime = Integer.parseInt(line[2]);
+	    			transfers.add(new busTransfers(fromStopID,toStopID, transferType, minTranTime));
+	    		}	
 	    	}
 		}
 		catch(FileNotFoundException e)
@@ -126,7 +131,7 @@ public class busMain {
 		}
 		
 
-*/
+
 	}	 //Use quickosrt to sort the stops by stop id
 	public static ArrayList<busStops> insertionSort (ArrayList<busStops> stops)   
 	{
@@ -185,5 +190,13 @@ public class busMain {
 	    } catch (DateTimeParseException | NullPointerException e) {
 	        return false;
 	    }
+	}
+	
+	public static String renameAddress(String str)
+	{
+		String firstThreeChars = str.substring(0, 3);
+		String removeFirstThree = str.substring(3);
+		String newString = removeFirstThree + " " + firstThreeChars;
+		return newString;
 	}
 }

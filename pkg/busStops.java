@@ -27,7 +27,7 @@ public class busStops {
 		this.stopZone = stopZone;
 		this.stopURL = stopURL;
 		this.stopLocType = stopLocType;
-		System.out.print("Hello");
+		//System.out.print("Hello");
 		this.stopParZone = stopParZone;
 		
 	}

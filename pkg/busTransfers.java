@@ -1,17 +1,18 @@
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class busTransfers {
 	public int fromStopID;
 	public int toStopID;
 	public int transferType;
-	public LocalDate minTranTime;
+	public int minTranTime;
 	
-	busTransfers(int fromTo, int toStop, int transferType, LocalDate minTranTimes)
+	busTransfers(int fromTo, int toStop, int transferType, int minTranTime2)
 	{
 		this.fromStopID = fromTo;
 		this.toStopID = toStop;
 		this.transferType = transferType;
-		this.minTranTime = minTranTimes;
+		this.minTranTime = minTranTime2;
 		
 	}
 }
