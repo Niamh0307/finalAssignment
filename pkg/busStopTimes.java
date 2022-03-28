@@ -14,7 +14,7 @@ public class busStopTimes {
 	public double distTrav;
 	
 	busStopTimes(int tripID, LocalDate arrivalTime, LocalDate departureTime, int stopID, int stopSeq, int stopHead,
-			int pickUpType, int dropOffType, double distTrav)
+			int pickUpType, int dropOffType, double distTravel)
 	{
 		this.tripID = tripID;
 		this.arrivalTime = arrivalTime;
@@ -24,7 +24,7 @@ public class busStopTimes {
 		this.stopHead = stopHead;
 		this.pickUpType = pickUpType;
 		this.dropOffType = dropOffType;
-		this.distTrav = distTrav;
+		this.distTrav = distTravel;
 	}
 	
 }

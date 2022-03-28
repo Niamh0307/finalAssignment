@@ -6,12 +6,12 @@ public class busTransfers {
 	public int transferType;
 	public LocalDate minTranTime;
 	
-	busTransfers(int fromTo, int toStop, int transferType, LocalDate mintranTime)
+	busTransfers(int fromTo, int toStop, int transferType, LocalDate minTranTimes)
 	{
 		this.fromStopID = fromTo;
 		this.toStopID = toStop;
 		this.transferType = transferType;
-		this.minTranTime = minTranTime;
+		this.minTranTime = minTranTimes;
 		
 	}
 }

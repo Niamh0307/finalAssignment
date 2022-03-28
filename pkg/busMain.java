@@ -55,7 +55,7 @@ public class busMain {
 		
 		catch(FileNotFoundException e)
 		{
-			System.out.print("hi");
+			System.out.print("hello");
 		}
 	            
 		
