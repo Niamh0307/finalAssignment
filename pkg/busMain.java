@@ -26,35 +26,36 @@ public class busMain {
 				reader = new BufferedReader(new FileReader("C:\\Users\\35387\\git\\finalAssignment\\pkg\\stops.txt"));
 				Scanner scanner = new Scanner(reader);
 				scanner.nextLine();
-	            //while (scanner.hasNextLine()) 
+	            while (scanner.hasNextLine()) 
 	            {
 	            	//String lineOfInfo = scanner.nextLine();
 	            	//String lines = scanner.nextLine();
+	            	
 	            	String [] line = scanner.nextLine().split(",");
-	            	//for (int i = 0; i < line.length; i++)
-	            	//{
-	            		//String lineID = (line[1]);
-	            	//}
-	    			int stopID = Integer.parseInt(line[0]);
-	    			//System.out.print(stopID);
-	    			//System.out.println(line[1]);
-	    			//System.out.println(lineID);
-	    			//int stopCode = Integer.parseInt(lineID);
-	    			String unsortedName = line[2];
-	    			String stopName = renameAddress(unsortedName);
-	    			System.out.print(stopName);
-	    			String stopDesc = line[3];
-	    			double stopLat = Double.parseDouble(line[4]);
-	    			double stopLon = Double.parseDouble(line[5]);
-	    			String stopZone = line[6];
-	    			String stopURL = line[7];
-	    			int stopLocType = Integer.parseInt(line[8]);
-	    			int stopParZone = 0;
+	            	int stopID = Integer.parseInt(line[0]);
+	            	
+	            	String lineID = (line[1]);
+	            	if(!line[1].contains(" "))
+	            	{
+	            		int stopCode = Integer.parseInt(line[1]);	
+	            		System.out.println(stopCode);
+	            		String unsortedName = line[2];
+	            		String stopName = renameAddress(unsortedName);
+	            		//System.out.print(stopName);
+	            		String stopDesc = line[3];
+	            		double stopLat = Double.parseDouble(line[4]);
+	            		double stopLon = Double.parseDouble(line[5]);
+	            		String stopZone = line[6];
+	            		String stopURL = line[7];
+	            		int stopLocType = Integer.parseInt(line[8]);
+	            		int stopParZone = 0;
 	    			//stops.add(new busStops(stopID, stopCode, stopName, stopDesc, stopLat, stopLon, 
 	    					//stopZone, stopURL, stopLocType, stopParZone));
 	    			//insertionSort(stops);
 	    			//System.out.print(stopID);
 	    		}
+	            	
+	            }
 		}
 		
 		catch(FileNotFoundException e)

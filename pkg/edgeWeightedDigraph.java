@@ -4,7 +4,9 @@ public class edgeWeightedDigraph {
 	private int E; // number of edges
 	private Bag<DirectedEdge>[] adj; // adjacency lists
 	
-	public EdgeWeightedDigraph(int V)
+	
+	
+	public edgeWeightedDigraph(int V)
 	{
 		this.V = V;
 		this.E = 0;
@@ -15,7 +17,19 @@ public class edgeWeightedDigraph {
 		}
 	}
 	
-	public EdgeWeightedDigraph(In in)
+	public edgeWeightedDigraph(In in)
+	{
+		this(in.readInt()); // Read V and construct this graph.
+		int E = in.readInt(); // Read E.
+		for (int i = 0; i < E; i++)
+		{ // Add an edge.
+		int v = in.readInt(); // Read a vertex,
+		int w = in.readInt(); // read another vertex,
+		addEdge(v, w); // and add edge connecting them.
+		}
+	}
+	
+	
 	// See Exercise 4.4.2.
 	public int V() { return V; }
 	public int E() { return E; }
