@@ -2,7 +2,7 @@
 public class edgeWeightedDigraph {
 	private final int V; // number of vertices
 	private int E; // number of edges
-	private Bag<DirectedEdge>[] adj; // adjacency lists
+	private List<DirectedEdge>[] adj; // adjacency lists
 	
 	
 	
