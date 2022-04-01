@@ -19,8 +19,9 @@ public class busMain <Value> {
 		ArrayList<busStops> stops = new ArrayList<busStops>();
 		ArrayList<busStopTimes> stopTimes = new ArrayList<busStopTimes>();
 		ArrayList<busTransfers> transfers = new ArrayList<busTransfers>();
-		TST ternarySearchTree = new TST();
+		//TST ternarySearchTree = new TST();
 		BufferedReader reader = null;
+		
 			 try
 			 {
 				int i = 0;
@@ -37,7 +38,7 @@ public class busMain <Value> {
 	            		int stopCode = Integer.parseInt(line[1]);	
 	            		String unsortedName = line[2];
 	            		String stopName = renameAddress(unsortedName);
-	            		ternarySearchTree.put(stopName, i);
+	            		//ternarySearchTree.put(stopName, i);
 	            		String stopDesc = line[3];
 	            		double stopLat = Double.parseDouble(line[4]);
 	            		double stopLon = Double.parseDouble(line[5]);
@@ -63,8 +64,10 @@ public class busMain <Value> {
 	            				stopZone, stopURL, stopLocType));
 	            		insertionSort(stops);	
 	            	}
-	            	i ++;
-	            }         
+	            	
+	            } 
+
+	            
 		}
 		catch(FileNotFoundException e)
 		{
@@ -136,7 +139,8 @@ public class busMain <Value> {
 		{
 			System.out.print("Hi");
 		}
-		
+        
+
 		
 	}	 //Use Insertionosrt to sort the stops by stop id
 	public static ArrayList<busStops> insertionSort (ArrayList<busStops> stops)   
@@ -208,5 +212,27 @@ public class busMain <Value> {
 		String removeFirstThree = str.substring(3);
 		String newString = removeFirstThree + " " + firstThreeChars;
 		return newString;
+	}
+	
+	public static edgeWeightedDigraph edgeWeightedDigraph(ArrayList<busStops> stops, ArrayList<busStopTimes> stopTimes, ArrayList<busTransfers> transfers)
+	{
+		Bag nodes = new Bag();
+		for (int i = 0; i < stops.size(); i ++)
+		{
+			int current = stops.get(i).stopID;
+			nodes.add(current);
+		}
+		edgeWeightedDigraph digraph = new edgeWeightedDigraph(nodes.size());
+		for (int i = 0; i < stopTimes.size(); i ++)
+		{
+			if (stopTimes.get(i).tripID == stopTimes.get(i+1 ).tripID)
+			{
+			int current = stopTimes.get(i).stopID;
+			int future = stopTimes.get(i+1).stopID;
+			double weight = 1.0;
+			DirectedEdge newEdge = new DirectedEdge(current, future, weight);
+			}
+			
+		}
 	}
 }

@@ -28,6 +28,11 @@ public class busStops {
 		this.stopURL = stopURL;
 		this.stopLocType = stopLocType;	
 	}
+	
+	public int getStopID(busStops stops)
+	{
+		return stops.stopID;
+	}
 	public static void main(String[] args)
 	{
 		System.out.print("well");
