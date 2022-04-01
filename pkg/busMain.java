@@ -13,69 +13,76 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-public class busMain {
+public class busMain <Value> {
 
 	public static void main(String[] args) {
 		ArrayList<busStops> stops = new ArrayList<busStops>();
 		ArrayList<busStopTimes> stopTimes = new ArrayList<busStopTimes>();
 		ArrayList<busTransfers> transfers = new ArrayList<busTransfers>();
+		TST ternarySearchTree = new TST();
 		BufferedReader reader = null;
-		/*
 			 try
 			 {
+				int i = 0;
 				reader = new BufferedReader(new FileReader("C:\\Users\\35387\\git\\finalAssignment\\pkg\\stops.txt"));
 				Scanner scanner = new Scanner(reader);
 				scanner.nextLine();
 	            while (scanner.hasNextLine()) 
 	            {
-	            	//String lineOfInfo = scanner.nextLine();
-	            	//String lines = scanner.nextLine();
-	            	
 	            	String [] line = scanner.nextLine().split(",");
 	            	int stopID = Integer.parseInt(line[0]);
-	            	
 	            	String lineID = (line[1]);
 	            	if(!line[1].contains(" "))
 	            	{
 	            		int stopCode = Integer.parseInt(line[1]);	
-	            		//System.out.println(stopCode);
 	            		String unsortedName = line[2];
 	            		String stopName = renameAddress(unsortedName);
-	            		//System.out.print(stopName);
+	            		ternarySearchTree.put(stopName, i);
 	            		String stopDesc = line[3];
 	            		double stopLat = Double.parseDouble(line[4]);
 	            		double stopLon = Double.parseDouble(line[5]);
 	            		String stopZone = line[6];
 	            		String stopURL = line[7];
 	            		int stopLocType = Integer.parseInt(line[8]);
-	            		int stopParZone = 0;
 	            		stops.add(new busStops(stopID, stopCode, stopName, stopDesc, stopLat, stopLon, 
-	            				stopZone, stopURL, stopLocType, stopParZone));
-	            		insertionSort(stops);
-	            		
-	    		}
-	            	
+	            				stopZone, stopURL, stopLocType));
+	            		insertionSort(stops);		
+	            	}
+	            	else 
+	            	{
+	            		int stopCode = 0;	
+	            		String unsortedName = line[2];
+	            		String stopName = renameAddress(unsortedName);
+	            		String stopDesc = line[3];
+	            		double stopLat = Double.parseDouble(line[4]);
+	            		double stopLon = Double.parseDouble(line[5]);
+	            		String stopZone = line[6];
+	            		String stopURL = line[7];
+	            		int stopLocType = Integer.parseInt(line[8]);
+	            		stops.add(new busStops(stopID, stopCode, stopName, stopDesc, stopLat, stopLon, 
+	            				stopZone, stopURL, stopLocType));
+	            		insertionSort(stops);	
+	            	}
+	            	i ++;
 	            }         
 		}
 		catch(FileNotFoundException e)
 		{
 			System.out.print("hello");
 		}
-		*/
 		
 		try
 		{
 			reader = new BufferedReader(new FileReader("C:\\Users\\35387\\git\\finalAssignment\\pkg\\stop_times.txt"));
 			Scanner scanner = new Scanner(reader);
 			scanner.nextLine();
-            //while (scanner.hasNextLine())
+            while (scanner.hasNextLine())
 	    	{
 	    		String [] line = scanner.nextLine().split(",");
-	    		{	
-	    			int tripID = Integer.parseInt(line[0]);
-	    			String timeArriv = timeCheck(line[1]);
-	  				if (timeArriv != "-1")
-	  				{
+	    		int tripID = Integer.parseInt(line[0]);
+	    		String timeArriv = timeCheck(line[1]);
+	  			if (timeArriv != "-1")
+	  			{
 	    				LocalTime arrivalTime = LocalTime.parse(timeArriv);		
 					
 						String timeDep = timeCheck(line[2]);
@@ -87,28 +94,17 @@ public class busMain {
 	    					String lineID = (line[5]);
 	    	            	if(!line[5].contains(""))
 	    	            	{
-	    					int stopHead = Integer.parseInt(line[5]);
-	    					int pickUpType = Integer.parseInt(line[6]);
-	    					int dropOffType = Integer.parseInt(line[7]);
-	    					double distTrav = Double.parseDouble(line[8]);	
-	    					stopTimes.add(new busStopTimes(tripID, arrivalTime, departureTime, stopID,
-	    							stopSeq, stopHead, pickUpType, dropOffType,distTrav));
-	    	            	}
-	    	            	
-	  					}
-	  					else 
-	  					{
-	  						System.out.print("Error in departure time");
-	  					}
-	    		}
-	  				else
-	  				{
-	  					System.out.print("Error in arrival time");
+	    	            		int stopHead = Integer.parseInt(line[5]);
+	    	            		int pickUpType = Integer.parseInt(line[6]);
+	    	            		int dropOffType = Integer.parseInt(line[7]);
+	    	            		stopTimes.add(new busStopTimes(tripID, arrivalTime, departureTime, stopID,
+	    									stopSeq, stopHead, pickUpType, dropOffType));
+	    					}
+	    	            }
 	  				}
-	    		
+	    		}
 	    	}
 		
-	    	}}
 		catch(FileNotFoundException e)
 		{
 			System.out.print("Hi");
@@ -118,7 +114,7 @@ public class busMain {
 			reader = new BufferedReader(new FileReader("C:\\Users\\35387\\git\\finalAssignment\\pkg\\transfers.txt"));
 			Scanner scanner = new Scanner(reader);
 			scanner.nextLine();
-           // while (scanner.hasNextLine())
+           while (scanner.hasNextLine())
 	    	{
 	    		String [] line = scanner.nextLine().split(",");	
 	    		int fromStopID = Integer.parseInt(line[0]);
@@ -134,7 +130,6 @@ public class busMain {
 	    			minTranTime = Integer.parseInt(line[2]);
 	    			transfers.add(new busTransfers(fromStopID,toStopID, transferType, minTranTime));
 	    		}	
-	    		System.out.print(minTranTime);
 	    	}
 		}
 		catch(FileNotFoundException e)
@@ -142,7 +137,7 @@ public class busMain {
 			System.out.print("Hi");
 		}
 		
-
+		
 	}	 //Use Insertionosrt to sort the stops by stop id
 	public static ArrayList<busStops> insertionSort (ArrayList<busStops> stops)   
 	{
@@ -157,7 +152,6 @@ public class busMain {
 			    }
 			stops.get(i+1).stopID = current;
 		}
-		System.out.println(stops.get(0).stopID);
 		return stops;
 	}
 	public static String timeCheck (String timeInputted)

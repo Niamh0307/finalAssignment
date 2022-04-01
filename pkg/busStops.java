@@ -12,11 +12,11 @@ public class busStops {
 	public String stopZone ;
 	public String stopURL;
 	public int stopLocType ;
-	public int stopParZone ;
+
 	
 	
 	busStops(int stopID, int stopCode, String stopName, String stopDesc, double stopLat, double stopLon, 
-			String stopZone, String stopURL, int stopLocType, int stopParZone)
+			String stopZone, String stopURL, int stopLocType)
 	{
 		this.stopID = stopID;
 		this.stopCode = stopCode;
@@ -26,10 +26,7 @@ public class busStops {
 		this.stopLon = stopLon;
 		this.stopZone = stopZone;
 		this.stopURL = stopURL;
-		this.stopLocType = stopLocType;
-		//System.out.print("Hello");
-		this.stopParZone = stopParZone;
-		
+		this.stopLocType = stopLocType;	
 	}
 	public static void main(String[] args)
 	{
