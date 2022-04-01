@@ -13,6 +13,5 @@ public class busTransfers {
 		this.toStopID = toStop;
 		this.transferType = transferType;
 		this.minTranTime = minTranTime2;
-		
 	}
 }
