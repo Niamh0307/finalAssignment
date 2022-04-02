@@ -137,64 +137,82 @@ public class busMain <Value> {
 		}
         
 		//edgeWeightedDigraph(stops, stopTimes, transfers);
-		
-		System.out.print("Welcome to the bus network information system. Please select option 1, 2, 3"
+		Scanner input = new Scanner(System.in);
+		System.out.println("Welcome to the bus network information system. Please select option 1, 2, 3"
 				+ " or type quit to exit \n");
+		String answer = input.nextLine();
 		boolean validInput = false;
 		boolean finished = false;
-		Scanner input = new Scanner(System.in);
-		while (input.next() != "quit" && input.next() != "mainPage")
+		while (!finished)
 		{
-			if (input.next() == "1")
+			if (answer.equals("1"))
 			{
-			
+				System.out.println("Thank you for selecting option 1");
 			}
-			else if (input.nextLine() == "2")
+			else if (answer.equals("2"))
 			{
-			
+				System.out.println("Thank you for choosing option 2");
 			}
-			else if (input.next() == "3")
+			else if (answer.equals("quit"))
+			{
+				System.out.print("goodbye");
+				finished = true;
+				input.close();
+			}
+			
+			else if (answer.equals("3"))
 			{
 				boolean correctStartTime = false;
 				boolean correctEndTime = false;
-				System.out.print("You have selected to find all trips within a given arrival time \n"
-					+ "please input the begining of this time interval in the format hh:mm:ss \n or type quit to end the program \n"
-					+ "or type mainPage to return to the homescreen");
-				String startTime = input.next();
-				while (correctStartTime = false)
+				System.out.print("You have selected to find all trips within a given arrival time\n"
+					+ "please input the begining of this time interval in the format hh:mm:ss \nor type quit to end the program "
+					+ "\nor type mainPage to return to the homescreen");
+				String startTime = input.nextLine();
+				while (!correctStartTime)
 				{
-					//String startTime = input.next();
-					String startTimeCheck = timeCheck(startTime);
-					if (startTimeCheck == "-1")
-					{
-						System.out.print("Please enter a valid start time or type quit or mainPage");
-						input.next();
-					}
-					else if (startTimeCheck == "quit")
+					//String startTime = input.nextLine();
+					if (startTime.equals("quit"))
 					{
 						finished = true;
 						System.out.print("goodbye");	
 					}
-					else correctStartTime = true;		
-				}	
+					else
+					{
+						String startTimeCheck = timeCheck(startTime);
+						if (startTimeCheck == "-1")
+						{
+							System.out.print("Please enter a valid start time or type quit or mainPage");
+							input.next();
+						}
+						else correctStartTime = true;		
+					}	
+				}
 				System.out.print("Thank you for selecting an start time. Now please select an end time");
-				String endTime = input.next();
-				while (correctEndTime = false)
+				//String endTime = input.next();
+				while (correctEndTime == false)
 				{	
 					//System.out.print("Please enter the end of the time interval \n");
-					//String endTime = input.next();
+					String endTime = input.nextLine();
 					String endTimeCheck = timeCheck(endTime);
-					if (endTimeCheck == "-1")
-					{
-						System.out.print("Please enter a valid start time or type quit or mainPage");
-						input.next();
-					}
-					else if (endTimeCheck == "quit")
+					if (endTimeCheck.equals("quit"))
 					{
 						finished = true;
 						System.out.print("goodbye");	
 					}
-					else correctEndTime = true;
+					else if (isValidInterval(startTime, endTime))
+					{
+						correctEndTime = true;
+						ArrayList<busStopTimes> tripsInInterval = new ArrayList<busStopTimes>();
+						tripsInInterval .addAll(intervalList(startTime, endTime, stopTimes));
+						insertionSortStopTimes(tripsInInterval);
+						System.out.print(tripsInInterval.get(1).tripID);
+					}
+					else
+					{
+						System.out.print("Please enter a valid start time or type quit or mainPage");
+						input.next();
+					}
+					
 				}
 				
 				
@@ -209,8 +227,14 @@ public class busMain <Value> {
 				
 			}
 			
-		}	
+
 		
+			else
+			{
+				System.out.print("Please enter a valid option");
+				input.next();
+			}
+		}
 	}	 //Use Insertionosrt to sort the stops by stop id
 	public static ArrayList<busStops> insertionSort (ArrayList<busStops> stops)   
 	{
@@ -227,6 +251,22 @@ public class busMain <Value> {
 		}
 		return stops;
 	}
+	public static ArrayList<busStopTimes> insertionSortStopTimes (ArrayList<busStopTimes> stopTimes)   
+	{
+		for (int j = 1; j < stopTimes.size(); j++) 
+		{
+			int current = stopTimes.get(j).tripID;
+			int i = j-1;
+			while ((i > -1) && (stopTimes.get(i).tripID > current)) 
+				{
+			    	stopTimes.get(i+1).tripID = stopTimes.get(i).tripID;
+			    	i--;
+			    }
+			stopTimes.get(i+1).tripID = current;
+		}
+		return stopTimes;
+	}
+	
 	public static String timeCheck (String timeInputted)
 	{
 		String updatedTime;
@@ -315,5 +355,42 @@ public class busMain <Value> {
 		
 		System.out.print(digraph.V());
 		return digraph;
+	}
+	public static boolean isValidInterval(String arrival, String departure)
+	{
+		LocalTime startInterval = LocalTime.parse(arrival);
+		LocalTime endInterval = LocalTime.parse(departure);
+		if (endInterval.isAfter(startInterval))
+		{
+			return true;
+		}
+		else 
+			System.out.print("Selected end time is before the start time");
+			return false;
+	}
+	
+	public static ArrayList<busStopTimes> intervalList(String startTime, String endTime, ArrayList<busStopTimes> stopTimes)
+	{
+		ArrayList<busStopTimes> tripsInInterval = new ArrayList<busStopTimes>();
+		LocalTime startInterval = LocalTime.parse(startTime);
+		LocalTime endInterval = LocalTime.parse(endTime);
+		for (int i = 0; i < stopTimes.size(); i++)
+		{
+			LocalTime busTime = stopTimes.get(i).arrivalTime;
+			if (isBetweenTwoTimes(startInterval, endInterval, busTime))
+			{
+				tripsInInterval.add(stopTimes.get(i));
+			}
+		}
+		return tripsInInterval;
+	}
+	
+	public static boolean isBetweenTwoTimes(LocalTime start, LocalTime end, LocalTime checker)
+	{
+		if (end.isAfter(checker)&& start.isBefore(checker))
+		{
+			return true;
+		}
+		else return false;
 	}
 }
