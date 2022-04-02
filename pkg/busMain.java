@@ -21,7 +21,7 @@ public class busMain <Value> {
 		ArrayList<busTransfers> transfers = new ArrayList<busTransfers>();
 		//TST ternarySearchTree = new TST();
 		BufferedReader reader = null;
-		
+
 			 try
 			 {
 				int i = 0;
@@ -94,15 +94,11 @@ public class busMain <Value> {
 	    					LocalTime departureTime = LocalTime.parse(timeDep);		
 	    					int stopID = Integer.parseInt(line[3]);
 	    					int stopSeq = Integer.parseInt(line[4]);
-	    					String lineID = (line[5]);
-	    	            	if(!line[5].contains(""))
-	    	            	{
-	    	            		int stopHead = Integer.parseInt(line[5]);
-	    	            		int pickUpType = Integer.parseInt(line[6]);
-	    	            		int dropOffType = Integer.parseInt(line[7]);
-	    	            		stopTimes.add(new busStopTimes(tripID, arrivalTime, departureTime, stopID,
-	    									stopSeq, stopHead, pickUpType, dropOffType));
-	    					}
+	    	            	//int stopHead = Integer.parseInt(line[5]);
+	    	            	int pickUpType = Integer.parseInt(line[6]);
+	    	            	int dropOffType = Integer.parseInt(line[7]);
+	    	            	stopTimes.add(new busStopTimes(tripID, arrivalTime, departureTime, stopID,
+	    									stopSeq, pickUpType, dropOffType));
 	    	            }
 	  				}
 	    		}
@@ -140,7 +136,80 @@ public class busMain <Value> {
 			System.out.print("Hi");
 		}
         
-
+		//edgeWeightedDigraph(stops, stopTimes, transfers);
+		
+		System.out.print("Welcome to the bus network information system. Please select option 1, 2, 3"
+				+ " or type quit to exit \n");
+		boolean validInput = false;
+		boolean finished = false;
+		Scanner input = new Scanner(System.in);
+		while (input.next() != "quit" && input.next() != "mainPage")
+		{
+			if (input.next() == "1")
+			{
+			
+			}
+			else if (input.nextLine() == "2")
+			{
+			
+			}
+			else if (input.next() == "3")
+			{
+				boolean correctStartTime = false;
+				boolean correctEndTime = false;
+				System.out.print("You have selected to find all trips within a given arrival time \n"
+					+ "please input the begining of this time interval in the format hh:mm:ss \n or type quit to end the program \n"
+					+ "or type mainPage to return to the homescreen");
+				String startTime = input.next();
+				while (correctStartTime = false)
+				{
+					//String startTime = input.next();
+					String startTimeCheck = timeCheck(startTime);
+					if (startTimeCheck == "-1")
+					{
+						System.out.print("Please enter a valid start time or type quit or mainPage");
+						input.next();
+					}
+					else if (startTimeCheck == "quit")
+					{
+						finished = true;
+						System.out.print("goodbye");	
+					}
+					else correctStartTime = true;		
+				}	
+				System.out.print("Thank you for selecting an start time. Now please select an end time");
+				String endTime = input.next();
+				while (correctEndTime = false)
+				{	
+					//System.out.print("Please enter the end of the time interval \n");
+					//String endTime = input.next();
+					String endTimeCheck = timeCheck(endTime);
+					if (endTimeCheck == "-1")
+					{
+						System.out.print("Please enter a valid start time or type quit or mainPage");
+						input.next();
+					}
+					else if (endTimeCheck == "quit")
+					{
+						finished = true;
+						System.out.print("goodbye");	
+					}
+					else correctEndTime = true;
+				}
+				
+				
+			}
+			else if (input.next() == "quit")
+			{
+				System.out.print("goodbye");
+				finished = true;
+			}
+			else if (input.next() == "mainPage")
+			{
+				
+			}
+			
+		}	
 		
 	}	 //Use Insertionosrt to sort the stops by stop id
 	public static ArrayList<busStops> insertionSort (ArrayList<busStops> stops)   
@@ -217,22 +286,34 @@ public class busMain <Value> {
 	public static edgeWeightedDigraph edgeWeightedDigraph(ArrayList<busStops> stops, ArrayList<busStopTimes> stopTimes, ArrayList<busTransfers> transfers)
 	{
 		Bag nodes = new Bag();
+		Bag edges = new Bag();
+		/*for (int i = 0; i < stopTimes.size(); i ++)
+		{
+			int current = stopTimes.get(i).stopID;
+			edges.add(current);
+		}
+		*/
+		edgeWeightedDigraph digraph = new edgeWeightedDigraph(stopTimes.size());
+		for (int i = 0; i < stopTimes.size(); i ++)
+		{
+			if (stopTimes.get(i).tripID == stopTimes.get(i+1).tripID)
+			{
+				int current = i;
+				int future = i + 1;
+				String currentName = String.valueOf(stopTimes.get(i).stopID);
+				String futureName = String.valueOf(stopTimes.get(i+1).stopID);
+				double weight = 1.0;
+				DirectedEdge newEdge = new DirectedEdge(current, future, weight, currentName, futureName);
+				digraph.addEdge(newEdge);
+			}
+		}
 		for (int i = 0; i < stops.size(); i ++)
 		{
 			int current = stops.get(i).stopID;
 			nodes.add(current);
 		}
-		edgeWeightedDigraph digraph = new edgeWeightedDigraph(nodes.size());
-		for (int i = 0; i < stopTimes.size(); i ++)
-		{
-			if (stopTimes.get(i).tripID == stopTimes.get(i+1 ).tripID)
-			{
-			int current = stopTimes.get(i).stopID;
-			int future = stopTimes.get(i+1).stopID;
-			double weight = 1.0;
-			DirectedEdge newEdge = new DirectedEdge(current, future, weight);
-			}
-			
-		}
+		
+		System.out.print(digraph.V());
+		return digraph;
 	}
 }
