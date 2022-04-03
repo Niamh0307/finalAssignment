@@ -143,7 +143,7 @@ public class busMain <Value> {
 		String answer = input.nextLine();
 		boolean validInput = false;
 		boolean finished = false;
-		while (!finished)
+		//while (!finished)
 		{
 			if (answer.equals("1"))
 			{
@@ -152,6 +152,14 @@ public class busMain <Value> {
 			else if (answer.equals("2"))
 			{
 				System.out.println("Thank you for choosing option 2");
+				TST ternaryBusStops = new TST();
+				for(int i = 0; i < stops.size(); i ++)
+				{
+					ternaryBusStops.put(stops.get(i).stopName, stops.get(i).stopID );	
+				}
+				System.out.print("What stop would you like to find? \n");
+				String searchStop = input.nextLine();
+				stopFindByPrefix(searchStop.toUpperCase(), ternaryBusStops);
 			}
 			else if (answer.equals("quit"))
 			{
@@ -182,35 +190,39 @@ public class busMain <Value> {
 						if (startTimeCheck == "-1")
 						{
 							System.out.print("Please enter a valid start time or type quit or mainPage");
-							input.next();
+							input.nextLine();
 						}
 						else correctStartTime = true;		
 					}	
 				}
 				System.out.print("Thank you for selecting an start time. Now please select an end time");
 				//String endTime = input.next();
-				while (correctEndTime == false)
+				//while (!correctEndTime)
 				{	
 					//System.out.print("Please enter the end of the time interval \n");
 					String endTime = input.nextLine();
 					String endTimeCheck = timeCheck(endTime);
-					if (endTimeCheck.equals("quit"))
+					if (endTime.equals("quit"))
 					{
 						finished = true;
 						System.out.print("goodbye");	
 					}
-					else if (isValidInterval(startTime, endTime))
+					else if (!endTimeCheck.equals("-1") && isValidInterval(startTime, endTime))
 					{
-						correctEndTime = true;
+						System.out.print("endtime check working");
 						ArrayList<busStopTimes> tripsInInterval = new ArrayList<busStopTimes>();
-						tripsInInterval .addAll(intervalList(startTime, endTime, stopTimes));
+						tripsInInterval.addAll(intervalList(startTime, endTime, stopTimes));
 						insertionSortStopTimes(tripsInInterval);
-						System.out.print(tripsInInterval.get(1).tripID);
+						correctEndTime = true;
+						for (int i = 0; i < tripsInInterval.size(); i ++)
+						{
+							System.out.println(tripsInInterval.get(i).tripID);
+						}
 					}
 					else
 					{
-						System.out.print("Please enter a valid start time or type quit or mainPage");
-						input.next();
+						System.out.println("Please enter a valid start time or type quit or mainPage");
+						
 					}
 					
 				}
@@ -371,26 +383,49 @@ public class busMain <Value> {
 	
 	public static ArrayList<busStopTimes> intervalList(String startTime, String endTime, ArrayList<busStopTimes> stopTimes)
 	{
+		System.out.println("made it");
 		ArrayList<busStopTimes> tripsInInterval = new ArrayList<busStopTimes>();
 		LocalTime startInterval = LocalTime.parse(startTime);
 		LocalTime endInterval = LocalTime.parse(endTime);
 		for (int i = 0; i < stopTimes.size(); i++)
 		{
+			System.out.print("get here");
 			LocalTime busTime = stopTimes.get(i).arrivalTime;
 			if (isBetweenTwoTimes(startInterval, endInterval, busTime))
-			{
-				tripsInInterval.add(stopTimes.get(i));
+			{	
+				tripsInInterval.add(i, stopTimes.get(i));
 			}
+			else System.out.print("error");
+			
 		}
 		return tripsInInterval;
 	}
 	
 	public static boolean isBetweenTwoTimes(LocalTime start, LocalTime end, LocalTime checker)
 	{
-		if (end.isAfter(checker)&& start.isBefore(checker))
+		if (end.isAfter(checker) && start.isBefore(checker))
 		{
 			return true;
 		}
 		else return false;
+	}
+	
+	public static void stopFindByPrefix(String searchName, TST stopsTree)
+	{
+		Iterable<String> stopsWithPrefix = stopsTree.keysWithPrefix(searchName);
+        boolean notEmpty = false;
+        for (String key : stopsWithPrefix) {
+            if(key != null) {
+                notEmpty = true;
+                break;
+            }
+        }
+        if (notEmpty) {
+            for (String key : stopsWithPrefix) {
+                System.out.print(stopsTree.get(key));
+            }
+        } else {
+            System.out.println("No matching stops were found");
+        }
 	}
 }

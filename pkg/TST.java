@@ -1,6 +1,4 @@
-import java.util.Queue;
-
-public class TST <Value> {
+public class TST<Value> {
     private int n;              // size
     private Node<Value> root;   // root of TST
 
@@ -49,9 +47,14 @@ public class TST <Value> {
         if (key == null) {
             throw new IllegalArgumentException("calls get() with null argument");
         }
-        if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
+        if (key.length() == 0) 
+        	{
+        	throw new IllegalArgumentException("key must have length >= 1");
+        	}
         Node<Value> x = get(root, key, 0);
-        if (x == null) return null;
+        if (x == null) {
+        	return null;
+        }
         return x.val;
     }
 
@@ -131,7 +134,6 @@ public class TST <Value> {
      * use the foreach notation: {@code for (Key key : st.keys())}.
      * @return all keys in the symbol table as an {@code Iterable}
      */
-    
     public Iterable<String> keys() {
         Queue<String> queue = new Queue<String>();
         collect(root, new StringBuilder(), queue);
@@ -151,9 +153,16 @@ public class TST <Value> {
         }
         Queue<String> queue = new Queue<String>();
         Node<Value> x = get(root, prefix, 0);
-        if (x == null) return queue;
-        if (x.val != null) queue.enqueue(prefix);
-        collect(x.mid, new StringBuilder(prefix), queue);
+        if (x == null) 
+        	{
+        	//System.out.print("unlucky very Unlucky ");
+        	return queue;
+        	}
+        if (x.val != null) { 
+        	//System.out.print("Unlucky part 2");
+        	queue.enqueue(prefix);
+        	collect(x.mid, new StringBuilder(prefix), queue);
+        }
         return queue;
     }
 
@@ -194,6 +203,11 @@ public class TST <Value> {
         }
         if (c == '.' || c > x.c) collect(x.right, prefix, i, pattern, queue);
     }
+
+
+    /**
+     * Unit tests the {@code TST} data type.
+     *
+     * @param args the command-line arguments
+     */
 }
-
-
