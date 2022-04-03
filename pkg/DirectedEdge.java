@@ -2,8 +2,8 @@
 public class DirectedEdge {
 
 	    private final int v;
-	    private final String vName;
-	    private final String wName;
+	    //private final String vName;
+	    //private final String wName;
 	    private final int w;
 	    private final double weight;
 
@@ -17,13 +17,13 @@ public class DirectedEdge {
 	     *    is a negative integer
 	     * @throws IllegalArgumentException if {@code weight} is {@code NaN}
 	     */
-	    public DirectedEdge(int v, int w, double weight, String vName, String wName) {
+	    public DirectedEdge(int v, int w, double weight) {
 	        if (v < 0) throw new IllegalArgumentException("Vertex names must be non-negative integers");
 	        if (w < 0) throw new IllegalArgumentException("Vertex names must be non-negative integers");
 	        if (Double.isNaN(weight)) throw new IllegalArgumentException("Weight is NaN");
 	        this.v = v;
-	        this.vName = vName;
-	        this.wName = wName;
+	        //this.vName = vName;
+	        //this.wName = wName;
 	        this.w = w;
 	        this.weight = weight;
 	    }

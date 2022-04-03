@@ -1,29 +1,26 @@
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class DijkstraSP
 	{
 	private double[] distTo;          
     private DirectedEdge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
-    private IndexMinPQ<Double> pq;    
+    private IndexMinPQ<Double> pq; 
+    public ArrayList<busStops> shortestRoute;
+    public ArrayList<busStops> stops;
 
-    public DijkstraSP(edgeWeightedDigraph G, int s) {
-        for (DirectedEdge e : G.edges()) {
-            if (e.weight() < 0)
-                throw new IllegalArgumentException("edge " + e + " has negative weight");
-        }
-
+    public DijkstraSP(edgeWeightedDigraph G, int startNode) {
         distTo = new double[G.V()];
         edgeTo = new DirectedEdge[G.V()];
 
-        validateVertex(s);
 
         for (int v = 0; v < G.V(); v++)
             distTo[v] = Double.POSITIVE_INFINITY;
-        distTo[s] = 0.0;
+        distTo[startNode] = 0.0;
 
         // relax vertices in order of distance from s
         pq = new IndexMinPQ<Double>(G.V());
-        pq.insert(s, distTo[s]);
+        pq.insert(startNode, distTo[startNode]);
         while (!pq.isEmpty()) {
             int v = pq.delMin();
             for (DirectedEdge e : G.adj(v))
@@ -31,7 +28,7 @@ public class DijkstraSP
         }
 
         // check optimality conditions
-        assert check(G, s);
+        assert check(G, startNode);
     }
 
     // relax edge e and update pq if changed
@@ -153,6 +150,5 @@ public class DijkstraSP
      * @param args the command-line arguments
      */
     
-
-	
+    
 }

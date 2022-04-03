@@ -38,7 +38,6 @@ public class busMain <Value> {
 	            		int stopCode = Integer.parseInt(line[1]);	
 	            		String unsortedName = line[2];
 	            		String stopName = renameAddress(unsortedName);
-	            		//ternarySearchTree.put(stopName, i);
 	            		String stopDesc = line[3];
 	            		double stopLat = Double.parseDouble(line[4]);
 	            		double stopLon = Double.parseDouble(line[5]);
@@ -94,7 +93,6 @@ public class busMain <Value> {
 	    					LocalTime departureTime = LocalTime.parse(timeDep);		
 	    					int stopID = Integer.parseInt(line[3]);
 	    					int stopSeq = Integer.parseInt(line[4]);
-	    	            	//int stopHead = Integer.parseInt(line[5]);
 	    	            	int pickUpType = Integer.parseInt(line[6]);
 	    	            	int dropOffType = Integer.parseInt(line[7]);
 	    	            	stopTimes.add(new busStopTimes(tripID, arrivalTime, departureTime, stopID,
@@ -147,7 +145,25 @@ public class busMain <Value> {
 		{
 			if (answer.equals("1"))
 			{
+				edgeWeightedDigraph digraph = edgeWeightedDigraph(stops, stopTimes, transfers);
 				System.out.println("Thank you for selecting option 1");
+				System.out.println("Please enter your starting stop");
+				int startingStop = input.nextInt();
+				if (stopExists(stops, startingStop))
+				{
+					System.out.println("Please enter your end stop");
+					int finalStop = input.nextInt();
+					if (stopExists(stops, finalStop))
+					{
+						System.out.print("We will now calculate the shortest path\n");
+						DijkstraSP dijkstra = new DijkstraSP(digraph, startingStop);
+						System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
+						System.out.print("\nThe path to this stop is" + dijkstra.pathTo(finalStop));
+					}
+					else
+						System.out.print("invalid stop");
+				}
+				
 			}
 			else if (answer.equals("2"))
 			{
@@ -336,33 +352,34 @@ public class busMain <Value> {
 	}
 	
 	public static edgeWeightedDigraph edgeWeightedDigraph(ArrayList<busStops> stops, ArrayList<busStopTimes> stopTimes, ArrayList<busTransfers> transfers)
-	{
-		Bag nodes = new Bag();
-		Bag edges = new Bag();
-		/*for (int i = 0; i < stopTimes.size(); i ++)
+	{	
+		edgeWeightedDigraph digraph = new edgeWeightedDigraph(stopTimes.size() + transfers.size());
+		for (int i = 1; i < stopTimes.size(); i ++)
 		{
-			int current = stopTimes.get(i).stopID;
-			edges.add(current);
-		}
-		*/
-		edgeWeightedDigraph digraph = new edgeWeightedDigraph(stopTimes.size());
-		for (int i = 0; i < stopTimes.size(); i ++)
-		{
-			if (stopTimes.get(i).tripID == stopTimes.get(i+1).tripID)
+			if (stopTimes.get(i).tripID == stopTimes.get(i-1).tripID)
 			{
-				int current = i;
-				int future = i + 1;
-				String currentName = String.valueOf(stopTimes.get(i).stopID);
-				String futureName = String.valueOf(stopTimes.get(i+1).stopID);
+				int current = i-1;
+				int future = i;
+				String currentName = String.valueOf(stopTimes.get(i-1).stopID);
+				String futureName = String.valueOf(stopTimes.get(i).stopID);
 				double weight = 1.0;
-				DirectedEdge newEdge = new DirectedEdge(current, future, weight, currentName, futureName);
+				DirectedEdge newEdge = new DirectedEdge(stopTimes.get(i-1).stopID, stopTimes.get(i).stopID, weight);
 				digraph.addEdge(newEdge);
 			}
 		}
-		for (int i = 0; i < stops.size(); i ++)
+		for (int i = 1; i < transfers.size(); i ++)
 		{
-			int current = stops.get(i).stopID;
-			nodes.add(current);
+			if (transfers.get(i).toStopID == transfers.get(i-1).fromStopID)
+			{
+				int current = i-1;
+				int future = i;
+				String currentName = String.valueOf(transfers.get(i-1).fromStopID);
+				String futureName = String.valueOf(transfers.get(i).toStopID);
+				double weight = 2.0;
+				DirectedEdge newEdge = new DirectedEdge(transfers.get(i-1).fromStopID, transfers.get(i-1).toStopID, weight);
+				digraph.addEdge(newEdge);
+			}
+			System.out.print(digraph.V());
 		}
 		
 		System.out.print(digraph.V());
@@ -414,18 +431,36 @@ public class busMain <Value> {
 	{
 		Iterable<String> stopsWithPrefix = stopsTree.keysWithPrefix(searchName);
         boolean notEmpty = false;
-        for (String key : stopsWithPrefix) {
-            if(key != null) {
+        for (String key : stopsWithPrefix) 
+        {
+            if(key != null) 
+            {
                 notEmpty = true;
-                break;
             }
         }
-        if (notEmpty) {
-            for (String key : stopsWithPrefix) {
+        if (notEmpty) 
+        {
+            for (String key : stopsWithPrefix) 
+            {
                 System.out.print(stopsTree.get(key));
             }
-        } else {
+        } 
+        else 
+        {
             System.out.println("No matching stops were found");
         }
+	}
+	public static boolean stopExists (ArrayList <busStops> stops, int stopIDGiven)
+	{
+		boolean found  = false;
+		for (int i = 0; i < stops.size(); i ++)
+		{
+			if (stops.get(i).stopID == stopIDGiven)
+			{
+				found = true;
+			}
+		}
+		return found;
+		
 	}
 }
