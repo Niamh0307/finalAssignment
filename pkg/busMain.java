@@ -157,8 +157,13 @@ public class busMain <Value> {
 					{
 						System.out.print("We will now calculate the shortest path\n");
 						DijkstraSP dijkstra = new DijkstraSP(digraph, startingStop);
+						if (dijkstra.distTo(finalStop) != Double.POSITIVE_INFINITY)
+						{
 						System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
 						System.out.print("\nThe path to this stop is" + dijkstra.pathTo(finalStop));
+						}
+						else
+							System.out.print("There is no path between those stops");
 					}
 					else
 						System.out.print("invalid stop");
@@ -171,9 +176,13 @@ public class busMain <Value> {
 				TST ternaryBusStops = new TST();
 				for(int i = 0; i < stops.size(); i ++)
 				{
-					ternaryBusStops.put(stops.get(i).stopName, stops.get(i).stopID );	
+					busStops currentStop = stops.get(i);
+					String key = String.valueOf(stops.get(i).stopID);
+					ternaryBusStops.put(currentStop.stopName, currentStop );	
 				}
-				System.out.print("What stop would you like to find? \n");
+				System.out.print(ternaryBusStops.size());
+				
+				System.out.print("\nWhat stop would you like to find? \n");
 				String searchStop = input.nextLine();
 				stopFindByPrefix(searchStop.toUpperCase(), ternaryBusStops);
 			}
@@ -379,10 +388,8 @@ public class busMain <Value> {
 				DirectedEdge newEdge = new DirectedEdge(transfers.get(i-1).fromStopID, transfers.get(i-1).toStopID, weight);
 				digraph.addEdge(newEdge);
 			}
-			System.out.print(digraph.V());
+			
 		}
-		
-		System.out.print(digraph.V());
 		return digraph;
 	}
 	public static boolean isValidInterval(String arrival, String departure)
@@ -430,6 +437,7 @@ public class busMain <Value> {
 	public static void stopFindByPrefix(String searchName, TST stopsTree)
 	{
 		Iterable<String> stopsWithPrefix = stopsTree.keysWithPrefix(searchName);
+		ArrayList<busStops> stopsInPrefix = new ArrayList<busStops>();
         boolean notEmpty = false;
         for (String key : stopsWithPrefix) 
         {
@@ -442,7 +450,7 @@ public class busMain <Value> {
         {
             for (String key : stopsWithPrefix) 
             {
-                System.out.print(stopsTree.get(key));
+                System.out.println((stopsTree.get(key)));
             }
         } 
         else 

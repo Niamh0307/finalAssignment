@@ -147,25 +147,20 @@ public class TST<Value> {
      *     as an iterable
      * @throws IllegalArgumentException if {@code prefix} is {@code null}
      */
+
     public Iterable<String> keysWithPrefix(String prefix) {
         if (prefix == null) {
             throw new IllegalArgumentException("calls keysWithPrefix() with null argument");
         }
         Queue<String> queue = new Queue<String>();
-        Node<Value> x = get(root, prefix, 0);
-        if (x == null) 
-        	{
-        	//System.out.print("unlucky very Unlucky ");
-        	return queue;
-        	}
-        if (x.val != null) { 
-        	//System.out.print("Unlucky part 2");
-        	queue.enqueue(prefix);
-        	collect(x.mid, new StringBuilder(prefix), queue);
-        }
+        Node x = get(root, prefix, 0);
+        if (x == null)
+            return queue;
+        if (x.val != null)
+            queue.enqueue(prefix);
+        collect(x.mid, new StringBuilder(prefix), queue);
         return queue;
     }
-
     // all keys in subtrie rooted at x with given prefix
     private void collect(Node<Value> x, StringBuilder prefix, Queue<String> queue) {
         if (x == null) return;
