@@ -38,6 +38,7 @@ public class busMain <Value> {
 	            		int stopCode = Integer.parseInt(line[1]);	
 	            		String unsortedName = line[2];
 	            		String stopName = renameAddress(unsortedName);
+	            		System.out.println(stopName);
 	            		String stopDesc = line[3];
 	            		double stopLat = Double.parseDouble(line[4]);
 	            		double stopLon = Double.parseDouble(line[5]);
@@ -53,6 +54,7 @@ public class busMain <Value> {
 	            		int stopCode = 0;	
 	            		String unsortedName = line[2];
 	            		String stopName = renameAddress(unsortedName);
+	            		System.out.println(stopName);
 	            		String stopDesc = line[3];
 	            		double stopLat = Double.parseDouble(line[4]);
 	            		double stopLon = Double.parseDouble(line[5]);
@@ -380,9 +382,27 @@ public class busMain <Value> {
 	public static String renameAddress(String str)
 	{
 		String firstThreeChars = str.substring(0, 3);
+		String firstNineChars = str.substring(0, 9);
+		if (firstThreeChars.equals("WB ")|| firstThreeChars.equals("NB ")|| firstThreeChars.equals("SB ")|| firstThreeChars.equals("EB "))
+		{
 		String removeFirstThree = str.substring(3);
 		String newString = removeFirstThree + " " + firstThreeChars;
 		return newString;
+		}
+		else if (firstNineChars.equals("FLAGSTOP "))
+		{
+			String removeFirstNine = str.substring(9);
+			String newString = removeFirstNine + " " + firstNineChars;
+			String newCheck = newString.substring(0, 3);
+			if (newCheck.equals("WB ")|| newCheck.equals("NB ")|| newCheck.equals("SB ")|| newCheck.equals("EB "))
+			{
+				String removeFirstThree = newString.substring(3);
+				String doubleUpdate = removeFirstThree + newCheck;
+				return doubleUpdate;
+			}
+			else return newString;	
+		}
+		else return str;
 	}
 	
 	public static edgeWeightedDigraph edgeWeightedDigraph(ArrayList<busStops> stops, ArrayList<busStopTimes> stopTimes, ArrayList<busTransfers> transfers)
@@ -417,21 +437,8 @@ public class busMain <Value> {
 		}
 		return digraph;
 	}
-	/*
-	public static boolean isValidInterval(String arrival, String departure)
-	{
-		LocalTime startInterval = LocalTime.parse(arrival);
-		LocalTime endInterval = LocalTime.parse(departure);
-		if (endInterval.isAfter(startInterval))
-		{
-			
-			return true;
-		}
-		else 
-			System.out.print("Selected end time is before the start time");
-			return false;
-	}
-	*/
+
+
 	
 	public static void stopFindByPrefix(String searchName, TST stopsTree)
 	{
