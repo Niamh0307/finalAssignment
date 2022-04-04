@@ -5,15 +5,15 @@ import java.util.Date;
 public class busStopTimes {
 	
 	public int tripID ;
-	public LocalTime arrivalTime;
-	public LocalTime departureTime;
+	public String arrivalTime;
+	public String departureTime;
 	public int stopID;
 	public int stopSeq;
 	//public int stopHead;
 	public int pickUpType;
 	public int dropOffType;
 	
-	busStopTimes(int tripID, LocalTime arrivalTime2, LocalTime departureTime2, int stopID, int stopSeq, 
+	busStopTimes(int tripID, String arrivalTime2, String departureTime2, int stopID, int stopSeq, 
 			int pickUpType, int dropOffType)
 	{
 		this.tripID = tripID;

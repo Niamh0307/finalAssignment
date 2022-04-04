@@ -85,12 +85,12 @@ public class busMain <Value> {
 	    		String timeArriv = timeCheck(line[1]);
 	  			if (timeArriv != "-1")
 	  			{
-	    				LocalTime arrivalTime = LocalTime.parse(timeArriv);		
+	    				String arrivalTime = timeArriv;		
 					
 						String timeDep = timeCheck(line[2]);
 	  					if (timeDep != "-1")
 	  					{
-	    					LocalTime departureTime = LocalTime.parse(timeDep);		
+	    					String departureTime = timeDep;		
 	    					int stopID = Integer.parseInt(line[3]);
 	    					int stopSeq = Integer.parseInt(line[4]);
 	    	            	int pickUpType = Integer.parseInt(line[6]);
@@ -199,7 +199,7 @@ public class busMain <Value> {
 				boolean correctEndTime = false;
 				System.out.print("You have selected to find all trips within a given arrival time\n"
 					+ "please input the begining of this time interval in the format hh:mm:ss \nor type quit to end the program "
-					+ "\nor type mainPage to return to the homescreen");
+					+ "\nor type mainPage to return to the homescreen \n");
 				String startTime = input.nextLine();
 				while (!correctStartTime)
 				{
@@ -217,13 +217,38 @@ public class busMain <Value> {
 							System.out.print("Please enter a valid start time or type quit or mainPage");
 							input.nextLine();
 						}
-						else correctStartTime = true;		
+						else 
+						{
+							correctStartTime = true;	
+							System.out.print("Thank you for selecting a start time. Below are the trips with this arrival time \n");
+							ArrayList<busStopTimes> hello = arrivalBusStops(stopTimes, startTime);
+							if (hello.size() == 0)
+							{
+								System.out.print("\nSorry there are no trips with this arrival time");
+							}
+							else
+							{
+								for (int i = 0; i < hello.size(); i ++)
+								{
+									System.out.println("Trip ID: " + hello.get(i).tripID);
+									System.out.println("Arrival Time: "+ hello.get(i).arrivalTime);
+									System.out.println("Departure Time:" + hello.get(i).departureTime);
+									System.out.println("Stop ID: " + hello.get(i).stopID);
+									System.out.println("");
+									
+								}
+							}
+								
+
+						}
 					}	
 				}
-				System.out.print("Thank you for selecting an start time. Now please select an end time");
+				
+				
+				
 				//String endTime = input.next();
 				//while (!correctEndTime)
-				{	
+				/*{	
 					//System.out.print("Please enter the end of the time interval \n");
 					String endTime = input.nextLine();
 					String endTimeCheck = timeCheck(endTime);
@@ -252,7 +277,7 @@ public class busMain <Value> {
 					
 				}
 				
-				
+				*/
 			}
 			else if (input.next() == "quit")
 			{
@@ -392,47 +417,21 @@ public class busMain <Value> {
 		}
 		return digraph;
 	}
+	/*
 	public static boolean isValidInterval(String arrival, String departure)
 	{
 		LocalTime startInterval = LocalTime.parse(arrival);
 		LocalTime endInterval = LocalTime.parse(departure);
 		if (endInterval.isAfter(startInterval))
 		{
+			
 			return true;
 		}
 		else 
 			System.out.print("Selected end time is before the start time");
 			return false;
 	}
-	
-	public static ArrayList<busStopTimes> intervalList(String startTime, String endTime, ArrayList<busStopTimes> stopTimes)
-	{
-		System.out.println("made it");
-		ArrayList<busStopTimes> tripsInInterval = new ArrayList<busStopTimes>();
-		LocalTime startInterval = LocalTime.parse(startTime);
-		LocalTime endInterval = LocalTime.parse(endTime);
-		for (int i = 0; i < stopTimes.size(); i++)
-		{
-			System.out.print("get here");
-			LocalTime busTime = stopTimes.get(i).arrivalTime;
-			if (isBetweenTwoTimes(startInterval, endInterval, busTime))
-			{	
-				tripsInInterval.add(i, stopTimes.get(i));
-			}
-			else System.out.print("error");
-			
-		}
-		return tripsInInterval;
-	}
-	
-	public static boolean isBetweenTwoTimes(LocalTime start, LocalTime end, LocalTime checker)
-	{
-		if (end.isAfter(checker) && start.isBefore(checker))
-		{
-			return true;
-		}
-		else return false;
-	}
+	*/
 	
 	public static void stopFindByPrefix(String searchName, TST stopsTree)
 	{
@@ -470,5 +469,18 @@ public class busMain <Value> {
 		}
 		return found;
 		
+	}
+	public static ArrayList<busStopTimes> arrivalBusStops (ArrayList <busStopTimes> stopTimes, String arrivalsTime)
+	{
+		ArrayList<busStopTimes> busStopArrival = new ArrayList<busStopTimes>();
+		for (int i = 0; i < stopTimes.size(); i ++)
+		{
+			String time = stopTimes.get(i).arrivalTime;
+			if (time.equals(arrivalsTime))
+			{
+				busStopArrival.add(stopTimes.get(i));
+			}
+		}
+		return busStopArrival;
 	}
 }
