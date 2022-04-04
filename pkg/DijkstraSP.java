@@ -75,12 +75,27 @@ public class DijkstraSP
      *         as an iterable of edges, and {@code null} if no such path
      * @throws IllegalArgumentException unless {@code 0 <= v < V}
      */
-    public Iterable<DirectedEdge> pathTo(int v) {
+    public Iterable<DirectedEdge> pathTo(int v, ArrayList<busStops> stopList) { 
+    	ArrayList <Integer> stopID = new ArrayList<Integer>();
         validateVertex(v);
         if (!hasPathTo(v)) return null;
-        Stack<DirectedEdge> path = new Stack<DirectedEdge>();
+        ArrayList<DirectedEdge> path = new ArrayList<DirectedEdge>();
         for (DirectedEdge e = edgeTo[v]; e != null; e = edgeTo[e.from()]) {
-            path.push(e);
+            path.add(e);
+            stopID.add(e.from());
+        }
+        for (int i = 0; i < stopList.size(); i ++)
+        {
+        	for (int j = 0; j < stopID.size(); j ++)
+        	{
+        		if (stopList.get(i).stopID == stopID.get(j))
+        		{
+        			System.out.println(stopList.get(i).stopID);
+        			System.out.println(stopList.get(i).stopName);
+        			System.out.println(stopList.get(i).stopDesc);
+        			System.out.println("");
+        		}
+        	}
         }
         return path;
     }

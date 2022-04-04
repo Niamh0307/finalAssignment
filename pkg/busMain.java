@@ -38,7 +38,6 @@ public class busMain <Value> {
 	            		int stopCode = Integer.parseInt(line[1]);	
 	            		String unsortedName = line[2];
 	            		String stopName = renameAddress(unsortedName);
-	            		System.out.println(stopName);
 	            		String stopDesc = line[3];
 	            		double stopLat = Double.parseDouble(line[4]);
 	            		double stopLon = Double.parseDouble(line[5]);
@@ -54,7 +53,6 @@ public class busMain <Value> {
 	            		int stopCode = 0;	
 	            		String unsortedName = line[2];
 	            		String stopName = renameAddress(unsortedName);
-	            		System.out.println(stopName);
 	            		String stopDesc = line[3];
 	            		double stopLat = Double.parseDouble(line[4]);
 	            		double stopLon = Double.parseDouble(line[5]);
@@ -139,7 +137,7 @@ public class busMain <Value> {
 		//edgeWeightedDigraph(stops, stopTimes, transfers);
 		Scanner input = new Scanner(System.in);
 		System.out.println("Welcome to the bus network information system. Please select option 1, 2, 3"
-				+ " or type quit to exit \n");
+				+ " or type quit to exit");
 		String answer = input.nextLine();
 		boolean validInput = false;
 		boolean finished = false;
@@ -161,8 +159,19 @@ public class busMain <Value> {
 						DijkstraSP dijkstra = new DijkstraSP(digraph, startingStop);
 						if (dijkstra.distTo(finalStop) != Double.POSITIVE_INFINITY)
 						{
-						System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
-						System.out.print("\nThe path to this stop is" + dijkstra.pathTo(finalStop));
+							System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
+							System.out.println("The path to this stop is " + dijkstra.pathTo(finalStop, stops));
+							for (int i =0; i < stops.size(); i++)
+							{
+								if (stops.get(i).stopID == finalStop)
+								{
+									System.out.println(stops.get(i).stopID);
+				        			System.out.println(stops.get(i).stopName);
+				        			System.out.println(stops.get(i).stopDesc);
+				        			System.out.println("");
+								}
+							}
+						
 						}
 						else
 							System.out.print("There is no path between those stops");
