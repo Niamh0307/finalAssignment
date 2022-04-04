@@ -16,7 +16,7 @@ public class busMain <Value> {
 
 			 try
 			 {
-				int i = 0;
+
 				reader = new BufferedReader(new FileReader("C:\\Users\\35387\\git\\finalAssignment\\pkg\\stops.txt"));
 				Scanner scanner = new Scanner(reader);
 				scanner.nextLine();
@@ -139,48 +139,54 @@ public class busMain <Value> {
 			if (answer.equals("1"))
 			{
 				edgeWeightedDigraph digraph = edgeWeightedDigraph(stops, stopTimes, transfers);
-				
+
+				System.out.println("Thank you for selecting option 1");
+				System.out.println("Please enter your starting stop or type mainpage to return to the main menu");
 				while (!finishedPart1)
 				{
-					System.out.println("Thank you for selecting option 1");
-					System.out.println("Please enter your starting stop");
-					int startingStop = input.nextInt();
-					if (stopExists(stops, startingStop))
+					String stopLookingFor = input.next();
+					if (isNumber(stopLookingFor))
 					{
-						System.out.println("Please enter your end stop");
-						int finalStop = input.nextInt();
-						if (stopExists(stops, finalStop))
+						int startingStop = Integer.parseInt(stopLookingFor);
+						if (stopExists(stops, startingStop))
 						{
-							System.out.print("We will now calculate the shortest path\n");
-							DijkstraSP dijkstra = new DijkstraSP(digraph, startingStop);
-							if (dijkstra.distTo(finalStop) != Double.POSITIVE_INFINITY)
+							System.out.println("Please enter your end stop");
+							int finalStop = input.nextInt();
+							if (stopExists(stops, finalStop))
 							{
-								System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
-								System.out.println("The path to this stop is " + dijkstra.pathTo(finalStop, stops));
-								for (int i =0; i < stops.size(); i++)
+								System.out.print("We will now calculate the shortest path\n");
+								DijkstraSP dijkstra = new DijkstraSP(digraph, startingStop);
+								if (dijkstra.distTo(finalStop) != Double.POSITIVE_INFINITY)
 								{
-									if (stops.get(i).stopID == finalStop)
+									System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
+									System.out.println("The path to this stop is " + dijkstra.pathTo(finalStop, stops));
+									for (int i =0; i < stops.size(); i++)
 									{
-										System.out.println(stops.get(i).stopID);
-										System.out.println(stops.get(i).stopName);
-										System.out.println(stops.get(i).stopDesc);
-										System.out.println("");
+										if (stops.get(i).stopID == finalStop)
+										{
+											System.out.println(stops.get(i).stopID);
+											System.out.println(stops.get(i).stopName);
+											System.out.println(stops.get(i).stopDesc);
+											System.out.println("");
+										}
 									}
+									finishedPart1 = true;
+									
 								}
-								finishedPart1 = true;
-								
+								else
+								{
+									System.out.print("There is no path between those stops");
+									finishedPart1 = true;
+								}
 							}
 							else
-							{
-								System.out.print("There is no path between those stops");
-								finishedPart1 = true;
-							}
+								System.out.print("invalid stop");
 						}
-						else
-							System.out.print("invalid stop");
 					}
-				
-				
+					else if (stopLookingFor.equals("mainpage"))
+					{
+						finishedPart1 = true;
+					}
 				}
 			}
 			else if (answer.equals("2"))
@@ -195,15 +201,9 @@ public class busMain <Value> {
 						String key = String.valueOf(stops.get(i).stopID);
 						ternaryBusStops.put(currentStop.stopName, currentStop );	
 					}
-					System.out.print(ternaryBusStops.size());
-					System.out.println("Enter a stop to find or type quit to exit or mainpage to return to the main menu\n");
+					System.out.println("Enter a stop to find or type mainpage to return to the main menu\n");
 					String searchStop = input.next();
-					if (searchStop.equals("quit"))
-					{
-						System.out.println("Goodbye");
-						finished = true;
-					}
-					else if (searchStop.equals("mainpage"))
+					if (searchStop.equals("mainpage"))
 					{
 						finishedPart2 = true;
 					}
@@ -231,13 +231,8 @@ public class busMain <Value> {
 							+ "please input the begining of this time interval in the format hh:mm:ss \nor type quit to end the program \nOr type mainpage to return to the main menu");
 					String startTime = input.next();
 					while (!correctStartTime)
-					{
-						if (startTime.equals("quit"))
-						{
-							finished = true;
-							System.out.print("goodbye");	
-						}
-						else if (startTime.equals("mainpage"))
+					{	
+						if (startTime.equals("mainpage"))
 						{
 							finishedPart3 = true;
 						}
@@ -476,5 +471,17 @@ public class busMain <Value> {
 			}
 		}
 		return busStopArrival;
+	}
+	public static boolean isNumber (String number)
+	{
+		if (number == null) {
+	        return false;
+	    }
+	    try {
+	        int d = Integer.parseInt(number);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
 	}
 }
