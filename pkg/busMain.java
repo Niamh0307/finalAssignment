@@ -226,7 +226,6 @@ public class busMain <Value> {
 				while (!finishedPart3)
 				{
 					boolean correctStartTime = false;
-					boolean correctEndTime = false;
 					System.out.print("You have selected to find all trips within a given arrival time\n"
 							+ "please input the begining of this time interval in the format hh:mm:ss \nor type quit to end the program \nOr type mainpage to return to the main menu");
 					String startTime = input.next();
