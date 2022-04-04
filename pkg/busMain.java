@@ -1,17 +1,10 @@
 import java.io.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class busMain <Value> {
 
@@ -19,7 +12,6 @@ public class busMain <Value> {
 		ArrayList<busStops> stops = new ArrayList<busStops>();
 		ArrayList<busStopTimes> stopTimes = new ArrayList<busStopTimes>();
 		ArrayList<busTransfers> transfers = new ArrayList<busTransfers>();
-		//TST ternarySearchTree = new TST();
 		BufferedReader reader = null;
 
 			 try
@@ -70,7 +62,7 @@ public class busMain <Value> {
 		}
 		catch(FileNotFoundException e)
 		{
-			System.out.print("hello");
+			System.out.print("File not found");
 		}
 		
 		try
@@ -104,7 +96,7 @@ public class busMain <Value> {
 		
 		catch(FileNotFoundException e)
 		{
-			System.out.print("Hi");
+			System.out.print("File not found");
 		}
 		try
 		{
@@ -131,71 +123,96 @@ public class busMain <Value> {
 		}
 		catch(FileNotFoundException e)
 		{
-			System.out.print("Hi");
+			System.out.print("File not found");
 		}
-        
-		//edgeWeightedDigraph(stops, stopTimes, transfers);
+
 		Scanner input = new Scanner(System.in);
-		System.out.println("Welcome to the bus network information system. Please select option 1, 2, 3"
-				+ " or type quit to exit");
-		String answer = input.nextLine();
-		boolean validInput = false;
 		boolean finished = false;
-		//while (!finished)
+		boolean finishedPart1 = false;
+		boolean finishedPart2 = false;
+		boolean finishedPart3 = false;
+		while (!finished)
 		{
+			System.out.println("Welcome to the bus network information system. Please select option 1, 2, 3"
+				+ " or type quit to exit");
+			String answer = input.next();
 			if (answer.equals("1"))
 			{
 				edgeWeightedDigraph digraph = edgeWeightedDigraph(stops, stopTimes, transfers);
-				System.out.println("Thank you for selecting option 1");
-				System.out.println("Please enter your starting stop");
-				int startingStop = input.nextInt();
-				if (stopExists(stops, startingStop))
+				
+				while (!finishedPart1)
 				{
-					System.out.println("Please enter your end stop");
-					int finalStop = input.nextInt();
-					if (stopExists(stops, finalStop))
+					System.out.println("Thank you for selecting option 1");
+					System.out.println("Please enter your starting stop");
+					int startingStop = input.nextInt();
+					if (stopExists(stops, startingStop))
 					{
-						System.out.print("We will now calculate the shortest path\n");
-						DijkstraSP dijkstra = new DijkstraSP(digraph, startingStop);
-						if (dijkstra.distTo(finalStop) != Double.POSITIVE_INFINITY)
+						System.out.println("Please enter your end stop");
+						int finalStop = input.nextInt();
+						if (stopExists(stops, finalStop))
 						{
-							System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
-							System.out.println("The path to this stop is " + dijkstra.pathTo(finalStop, stops));
-							for (int i =0; i < stops.size(); i++)
+							System.out.print("We will now calculate the shortest path\n");
+							DijkstraSP dijkstra = new DijkstraSP(digraph, startingStop);
+							if (dijkstra.distTo(finalStop) != Double.POSITIVE_INFINITY)
 							{
-								if (stops.get(i).stopID == finalStop)
+								System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
+								System.out.println("The path to this stop is " + dijkstra.pathTo(finalStop, stops));
+								for (int i =0; i < stops.size(); i++)
 								{
-									System.out.println(stops.get(i).stopID);
-				        			System.out.println(stops.get(i).stopName);
-				        			System.out.println(stops.get(i).stopDesc);
-				        			System.out.println("");
+									if (stops.get(i).stopID == finalStop)
+									{
+										System.out.println(stops.get(i).stopID);
+										System.out.println(stops.get(i).stopName);
+										System.out.println(stops.get(i).stopDesc);
+										System.out.println("");
+									}
 								}
+								finishedPart1 = true;
+								
 							}
-						
+							else
+							{
+								System.out.print("There is no path between those stops");
+								finishedPart1 = true;
+							}
 						}
 						else
-							System.out.print("There is no path between those stops");
+							System.out.print("invalid stop");
 					}
-					else
-						System.out.print("invalid stop");
-				}
 				
+				
+				}
 			}
 			else if (answer.equals("2"))
 			{
-				System.out.println("Thank you for choosing option 2");
-				TST ternaryBusStops = new TST();
-				for(int i = 0; i < stops.size(); i ++)
+				while (!finishedPart2)
 				{
-					busStops currentStop = stops.get(i);
-					String key = String.valueOf(stops.get(i).stopID);
-					ternaryBusStops.put(currentStop.stopName, currentStop );	
+					System.out.println("Thank you for choosing option 2");
+					TST ternaryBusStops = new TST();
+					for(int i = 0; i < stops.size(); i ++)
+					{
+						busStops currentStop = stops.get(i);
+						String key = String.valueOf(stops.get(i).stopID);
+						ternaryBusStops.put(currentStop.stopName, currentStop );	
+					}
+					System.out.print(ternaryBusStops.size());
+					System.out.println("Enter a stop to find or type quit to exit or mainpage to return to the main menu\n");
+					String searchStop = input.next();
+					if (searchStop.equals("quit"))
+					{
+						System.out.println("Goodbye");
+						finished = true;
+					}
+					else if (searchStop.equals("mainpage"))
+					{
+						finishedPart2 = true;
+					}
+					else
+					{	
+						stopFindByPrefix(searchStop.toUpperCase(), ternaryBusStops);
+						finishedPart2 = true;
+					}
 				}
-				System.out.print(ternaryBusStops.size());
-				
-				System.out.print("\nWhat stop would you like to find? \n");
-				String searchStop = input.nextLine();
-				stopFindByPrefix(searchStop.toUpperCase(), ternaryBusStops);
 			}
 			else if (answer.equals("quit"))
 			{
@@ -206,109 +223,72 @@ public class busMain <Value> {
 			
 			else if (answer.equals("3"))
 			{
-				boolean correctStartTime = false;
-				boolean correctEndTime = false;
-				System.out.print("You have selected to find all trips within a given arrival time\n"
-					+ "please input the begining of this time interval in the format hh:mm:ss \nor type quit to end the program "
-					+ "\nor type mainPage to return to the homescreen \n");
-				String startTime = input.nextLine();
-				while (!correctStartTime)
+				while (!finishedPart3)
 				{
-					//String startTime = input.nextLine();
-					if (startTime.equals("quit"))
+					boolean correctStartTime = false;
+					boolean correctEndTime = false;
+					System.out.print("You have selected to find all trips within a given arrival time\n"
+							+ "please input the begining of this time interval in the format hh:mm:ss \nor type quit to end the program \nOr type mainpage to return to the main menu");
+					String startTime = input.next();
+					while (!correctStartTime)
 					{
-						finished = true;
-						System.out.print("goodbye");	
-					}
-					else
-					{
-						String startTimeCheck = timeCheck(startTime);
-						if (startTimeCheck == "-1")
+						if (startTime.equals("quit"))
 						{
-							System.out.print("Please enter a valid start time or type quit or mainPage");
-							input.nextLine();
+							finished = true;
+							System.out.print("goodbye");	
 						}
-						else 
+						else if (startTime.equals("mainpage"))
 						{
-							correctStartTime = true;	
-							System.out.print("Thank you for selecting a start time. Below are the trips with this arrival time \n");
-							ArrayList<busStopTimes> hello = arrivalBusStops(stopTimes, startTime);
-							if (hello.size() == 0)
+							finishedPart3 = true;
+						}
+						else
+						{
+							String startTimeCheck = timeCheck(startTime);
+							if (startTimeCheck == "-1")
 							{
-								System.out.print("\nSorry there are no trips with this arrival time");
+								System.out.print("Please enter a valid start time or type quit");
+								input.next();
 							}
-							else
+							else 
 							{
-								for (int i = 0; i < hello.size(); i ++)
+								correctStartTime = true;	
+								System.out.print("Thank you for selecting a start time. Below are the trips with this arrival time \n");
+								ArrayList<busStopTimes> hello = arrivalBusStops(stopTimes, startTime);
+								if (hello.size() == 0)
 								{
-									System.out.println("Trip ID: " + hello.get(i).tripID);
-									System.out.println("Arrival Time: "+ hello.get(i).arrivalTime);
-									System.out.println("Departure Time:" + hello.get(i).departureTime);
-									System.out.println("Stop ID: " + hello.get(i).stopID);
-									System.out.println("");
-									
+									System.out.print("\nSorry there are no trips with this arrival time");
+									finishedPart3 = true;
+								}
+								else
+								{
+									for (int i = 0; i < hello.size(); i ++)
+									{
+										System.out.println("Trip ID: " + hello.get(i).tripID);
+										System.out.println("Arrival Time: "+ hello.get(i).arrivalTime);
+										System.out.println("Departure Time:" + hello.get(i).departureTime);
+										System.out.println("Stop ID: " + hello.get(i).stopID);
+										System.out.println("");
+									}
+									finishedPart3 = true;
 								}
 							}
-								
-
-						}
-					}	
+						}	
+					}
 				}
-				
-				
-				
-				//String endTime = input.next();
-				//while (!correctEndTime)
-				/*{	
-					//System.out.print("Please enter the end of the time interval \n");
-					String endTime = input.nextLine();
-					String endTimeCheck = timeCheck(endTime);
-					if (endTime.equals("quit"))
-					{
-						finished = true;
-						System.out.print("goodbye");	
-					}
-					else if (!endTimeCheck.equals("-1") && isValidInterval(startTime, endTime))
-					{
-						System.out.print("endtime check working");
-						ArrayList<busStopTimes> tripsInInterval = new ArrayList<busStopTimes>();
-						tripsInInterval.addAll(intervalList(startTime, endTime, stopTimes));
-						insertionSortStopTimes(tripsInInterval);
-						correctEndTime = true;
-						for (int i = 0; i < tripsInInterval.size(); i ++)
-						{
-							System.out.println(tripsInInterval.get(i).tripID);
-						}
-					}
-					else
-					{
-						System.out.println("Please enter a valid start time or type quit or mainPage");
-						
-					}
-					
-				}
-				
-				*/
 			}
 			else if (input.next() == "quit")
 			{
 				System.out.print("goodbye");
 				finished = true;
 			}
-			else if (input.next() == "mainPage")
-			{
-				
-			}
-			
-
-		
 			else
 			{
 				System.out.print("Please enter a valid option");
 				input.next();
 			}
+		
 		}
-	}	 //Use Insertionosrt to sort the stops by stop id
+	}
 	public static ArrayList<busStops> insertionSort (ArrayList<busStops> stops)   
 	{
 		for (int j = 1; j < stops.size(); j++) 
@@ -345,7 +325,7 @@ public class busMain <Value> {
 		String updatedTime;
 		if (timeInputted.length() < 8 || timeInputted.length()>8)
 		{
-			System.out.print("error 1");
+			System.out.print("Invalid time\n");
 			return "-1";
 		}
 		else if (timeInputted.charAt(0) == 1 || timeInputted.charAt(0) == 1)
@@ -355,10 +335,10 @@ public class busMain <Value> {
 				return timeInputted;
 			}
 			else 
-				System.out.print("error 2");
+				System.out.print("Invalid time\n");
 				return "-1";
 		}
-		else //if (timeInputted.length() == )
+		else 
 		{
 			updatedTime = addChar(timeInputted);
 			if (isValidTime(updatedTime))
@@ -366,7 +346,7 @@ public class busMain <Value> {
 				return updatedTime;
 			}
 			else 
-				System.out.print("error 3");
+				System.out.print("Invalid time\n");
 				return "-1";
 		}
 		
@@ -374,8 +354,7 @@ public class busMain <Value> {
 	public static String addChar(String str) {
 		String replacement = "0";
 	    String result = replacement + str.substring(1);
-	    return result;
-	    
+	    return result;    
 	}
 	
 	public static boolean isValidTime(String time)
@@ -394,9 +373,9 @@ public class busMain <Value> {
 		String firstNineChars = str.substring(0, 9);
 		if (firstThreeChars.equals("WB ")|| firstThreeChars.equals("NB ")|| firstThreeChars.equals("SB ")|| firstThreeChars.equals("EB "))
 		{
-		String removeFirstThree = str.substring(3);
-		String newString = removeFirstThree + " " + firstThreeChars;
-		return newString;
+			String removeFirstThree = str.substring(3);
+			String newString = removeFirstThree + " " + firstThreeChars;
+			return newString;
 		}
 		else if (firstNineChars.equals("FLAGSTOP "))
 		{
@@ -421,10 +400,6 @@ public class busMain <Value> {
 		{
 			if (stopTimes.get(i).tripID == stopTimes.get(i-1).tripID)
 			{
-				int current = i-1;
-				int future = i;
-				String currentName = String.valueOf(stopTimes.get(i-1).stopID);
-				String futureName = String.valueOf(stopTimes.get(i).stopID);
 				double weight = 1.0;
 				DirectedEdge newEdge = new DirectedEdge(stopTimes.get(i-1).stopID, stopTimes.get(i).stopID, weight);
 				digraph.addEdge(newEdge);
@@ -434,21 +409,14 @@ public class busMain <Value> {
 		{
 			if (transfers.get(i).toStopID == transfers.get(i-1).fromStopID)
 			{
-				int current = i-1;
-				int future = i;
-				String currentName = String.valueOf(transfers.get(i-1).fromStopID);
-				String futureName = String.valueOf(transfers.get(i).toStopID);
 				double weight = 2.0;
 				DirectedEdge newEdge = new DirectedEdge(transfers.get(i-1).fromStopID, transfers.get(i-1).toStopID, weight);
 				digraph.addEdge(newEdge);
 			}
-			
 		}
 		return digraph;
 	}
 
-
-	
 	public static void stopFindByPrefix(String searchName, TST stopsTree)
 	{
 		Iterable<String> stopsWithPrefix = stopsTree.keysWithPrefix(searchName);

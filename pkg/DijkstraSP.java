@@ -1,10 +1,10 @@
 import java.util.ArrayList;
-import java.util.Stack;
 
+//This class was taken from the Sedgewick and Wayne textbook and has been altered to fit the project
 public class DijkstraSP
 	{
 	private double[] distTo;          
-    private DirectedEdge[] edgeTo;    // edgeTo[v] = last edge on shortest s->v path
+    private DirectedEdge[] edgeTo;    
     private IndexMinPQ<Double> pq; 
     public ArrayList<busStops> shortestRoute;
     public ArrayList<busStops> stops;
@@ -18,7 +18,6 @@ public class DijkstraSP
             distTo[v] = Double.POSITIVE_INFINITY;
         distTo[startNode] = 0.0;
 
-        // relax vertices in order of distance from s
         pq = new IndexMinPQ<Double>(G.V());
         pq.insert(startNode, distTo[startNode]);
         while (!pq.isEmpty()) {
@@ -27,11 +26,9 @@ public class DijkstraSP
                 relax(e);
         }
 
-        // check optimality conditions
         assert check(G, startNode);
     }
 
-    // relax edge e and update pq if changed
     private void relax(DirectedEdge e) {
         int v = e.from(), w = e.to();
         if (distTo[w] > distTo[v] + e.weight()) {
@@ -42,39 +39,16 @@ public class DijkstraSP
         }
     }
 
-    /**
-     * Returns the length of a shortest path from the source vertex {@code s} to vertex {@code v}.
-     * @param  v the destination vertex
-     * @return the length of a shortest path from the source vertex {@code s} to vertex {@code v};
-     *         {@code Double.POSITIVE_INFINITY} if no such path
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
-     */
     public double distTo(int v) {
         validateVertex(v);
         return distTo[v];
     }
-
-    /**
-     * Returns true if there is a path from the source vertex {@code s} to vertex {@code v}.
-     *
-     * @param  v the destination vertex
-     * @return {@code true} if there is a path from the source vertex
-     *         {@code s} to vertex {@code v}; {@code false} otherwise
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
-     */
+    
     public boolean hasPathTo(int v) {
         validateVertex(v);
         return distTo[v] < Double.POSITIVE_INFINITY;
     }
 
-    /**
-     * Returns a shortest path from the source vertex {@code s} to vertex {@code v}.
-     *
-     * @param  v the destination vertex
-     * @return a shortest path from the source vertex {@code s} to vertex {@code v}
-     *         as an iterable of edges, and {@code null} if no such path
-     * @throws IllegalArgumentException unless {@code 0 <= v < V}
-     */
     public Iterable<DirectedEdge> pathTo(int v, ArrayList<busStops> stopList) { 
     	ArrayList <Integer> stopID = new ArrayList<Integer>();
         validateVertex(v);
@@ -100,13 +74,8 @@ public class DijkstraSP
         return path;
     }
 
-
-    // check optimality conditions:
-    // (i) for all edges e:            distTo[e.to()] <= distTo[e.from()] + e.weight()
-    // (ii) for all edge e on the SPT: distTo[e.to()] == distTo[e.from()] + e.weight()
     private boolean check(edgeWeightedDigraph G, int s) {
 
-        // check that edge weights are non-negative
         for (DirectedEdge e : G.edges()) {
             if (e.weight() < 0) {
                 System.err.println("negative edge weight detected");
@@ -114,7 +83,6 @@ public class DijkstraSP
             }
         }
 
-        // check that distTo[v] and edgeTo[v] are consistent
         if (distTo[s] != 0.0 || edgeTo[s] != null) {
             System.err.println("distTo[s] and edgeTo[s] inconsistent");
             return false;
@@ -127,7 +95,6 @@ public class DijkstraSP
             }
         }
 
-        // check that all edges e = v->w satisfy distTo[w] <= distTo[v] + e.weight()
         for (int v = 0; v < G.V(); v++) {
             for (DirectedEdge e : G.adj(v)) {
                 int w = e.to();
@@ -138,7 +105,6 @@ public class DijkstraSP
             }
         }
 
-        // check that all edges e = v->w on SPT satisfy distTo[w] == distTo[v] + e.weight()
         for (int w = 0; w < G.V(); w++) {
             if (edgeTo[w] == null) continue;
             DirectedEdge e = edgeTo[w];
@@ -152,18 +118,9 @@ public class DijkstraSP
         return true;
     }
 
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
     private void validateVertex(int v) {
         int V = distTo.length;
         if (v < 0 || v >= V)
             throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
-    }
-
-    /**
-     * Unit tests the {@code DijkstraSP} data type.
-     *
-     * @param args the command-line arguments
-     */
-    
-    
+    }    
 }
