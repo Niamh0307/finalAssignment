@@ -449,13 +449,23 @@ public class busMain <Value> {
         {
             for (String key : stopsWithPrefix) 
             {
-                System.out.println((stopsTree.get(key)));
+            	busStops newBusStop = stopsTree.get(key);
+                stopsInPrefix.add(newBusStop);
+            }
+            for (int i = 0; i < stopsInPrefix.size(); i++ )
+            {
+            System.out.println("Stop ID: " + stopsInPrefix.get(i).stopID);
+            System.out.println("Stop Name: " + stopsInPrefix.get(i).stopName);
+            System.out.println("Stop Description: " + stopsInPrefix.get(i).stopDesc);
+            System.out.println("");
             }
         } 
+        
         else 
         {
             System.out.println("No matching stops were found");
         }
+        
 	}
 	public static boolean stopExists (ArrayList <busStops> stops, int stopIDGiven)
 	{

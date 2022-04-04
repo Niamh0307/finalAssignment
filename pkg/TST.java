@@ -5,7 +5,7 @@ public class TST<Value> {
     private static class Node<Value> {
         private char c;                        // character
         private Node<Value> left, mid, right;  // left, middle, and right subtries
-        private Value val;                     // value associated with string
+        private busStops val;                     // value associated with string
     }
 
     /**
@@ -43,7 +43,7 @@ public class TST<Value> {
      *     and {@code null} if the key is not in the symbol table
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
-    public Value get(String key) {
+    public busStops get(String key) {
         if (key == null) {
             throw new IllegalArgumentException("calls get() with null argument");
         }
@@ -77,7 +77,7 @@ public class TST<Value> {
      * @param val the value
      * @throws IllegalArgumentException if {@code key} is {@code null}
      */
-    public void put(String key, Value val) {
+    public void put(String key, busStops val) {
         if (key == null) {
             throw new IllegalArgumentException("calls put() with null key");
         }
@@ -86,7 +86,7 @@ public class TST<Value> {
         root = put(root, key, val, 0);
     }
 
-    private Node<Value> put(Node<Value> x, String key, Value val, int d) {
+    private Node<Value> put(Node<Value> x, String key, busStops val, int d) {
         char c = key.charAt(d);
         if (x == null) {
             x = new Node<Value>();
