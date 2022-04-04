@@ -37,8 +37,7 @@ public class busMain <Value> {
 	            		String stopURL = line[7];
 	            		int stopLocType = Integer.parseInt(line[8]);
 	            		stops.add(new busStops(stopID, stopCode, stopName, stopDesc, stopLat, stopLon, 
-	            				stopZone, stopURL, stopLocType));
-	            		insertionSort(stops);		
+	            				stopZone, stopURL, stopLocType));	
 	            	}
 	            	else 
 	            	{
@@ -52,8 +51,7 @@ public class busMain <Value> {
 	            		String stopURL = line[7];
 	            		int stopLocType = Integer.parseInt(line[8]);
 	            		stops.add(new busStops(stopID, stopCode, stopName, stopDesc, stopLat, stopLon, 
-	            				stopZone, stopURL, stopLocType));
-	            		insertionSort(stops);	
+	            				stopZone, stopURL, stopLocType));	
 	            	}
 	            	
 	            } 
@@ -227,10 +225,11 @@ public class busMain <Value> {
 				{
 					boolean correctStartTime = false;
 					System.out.print("You have selected to find all trips within a given arrival time\n"
-							+ "please input the begining of this time interval in the format hh:mm:ss \nor type quit to end the program \nOr type mainpage to return to the main menu");
-					String startTime = input.next();
+							+ "please input the begining of this time interval in the format hh:mm:ss \nor type mainpage to return to the main menu \n");
+					
 					while (!correctStartTime)
 					{	
+						String startTime = input.next();
 						if (startTime.equals("mainpage"))
 						{
 							finishedPart3 = true;
@@ -240,8 +239,8 @@ public class busMain <Value> {
 							String startTimeCheck = timeCheck(startTime);
 							if (startTimeCheck == "-1")
 							{
-								System.out.print("Please enter a valid start time or type quit");
-								input.next();
+								System.out.print("Please enter a valid start time or type quit\n");
+								input.nextLine();
 							}
 							else 
 							{
@@ -250,7 +249,7 @@ public class busMain <Value> {
 								ArrayList<busStopTimes> hello = arrivalBusStops(stopTimes, startTime);
 								if (hello.size() == 0)
 								{
-									System.out.print("\nSorry there are no trips with this arrival time");
+									System.out.print("\nSorry there are no trips with this arrival time\n");
 									finishedPart3 = true;
 								}
 								else
@@ -277,26 +276,11 @@ public class busMain <Value> {
 			}
 			else
 			{
-				System.out.print("Please enter a valid option");
+				System.out.print("Please enter a valid option\n");
 				input.next();
 			}
 		
 		}
-	}
-	public static ArrayList<busStops> insertionSort (ArrayList<busStops> stops)   
-	{
-		for (int j = 1; j < stops.size(); j++) 
-		{
-			int current = stops.get(j).stopID;
-			int i = j-1;
-			while ((i > -1) && (stops.get(i).stopID > current)) 
-				{
-			    	stops.get(i+1).stopID = stops.get(i).stopID;
-			    	i--;
-			    }
-			stops.get(i+1).stopID = current;
-		}
-		return stops;
 	}
 	public static ArrayList<busStopTimes> insertionSortStopTimes (ArrayList<busStopTimes> stopTimes)   
 	{
@@ -322,7 +306,7 @@ public class busMain <Value> {
 			System.out.print("Invalid time\n");
 			return "-1";
 		}
-		else if (timeInputted.charAt(0) == 1 || timeInputted.charAt(0) == 1)
+		else if (timeInputted.charAt(0) == 1 || timeInputted.charAt(0) == 2)
 		{
 			if (isValidTime(timeInputted))
 			{
@@ -432,10 +416,10 @@ public class busMain <Value> {
             }
             for (int i = 0; i < stopsInPrefix.size(); i++ )
             {
-            System.out.println("Stop ID: " + stopsInPrefix.get(i).stopID);
-            System.out.println("Stop Name: " + stopsInPrefix.get(i).stopName);
-            System.out.println("Stop Description: " + stopsInPrefix.get(i).stopDesc);
-            System.out.println("");
+            	System.out.println("Stop ID: " + stopsInPrefix.get(i).stopID);
+            	System.out.println("Stop Name: " + stopsInPrefix.get(i).stopName);
+            	System.out.println("Stop Description: " + stopsInPrefix.get(i).stopDesc);
+            	System.out.println("");
             }
         } 
         
@@ -467,6 +451,7 @@ public class busMain <Value> {
 			if (time.equals(arrivalsTime))
 			{
 				busStopArrival.add(stopTimes.get(i));
+				insertionSortStopTimes(busStopArrival);
 			}
 		}
 		return busStopArrival;

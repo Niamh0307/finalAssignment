@@ -9,7 +9,6 @@ public class busStopTimes {
 	public String departureTime;
 	public int stopID;
 	public int stopSeq;
-	//public int stopHead;
 	public int pickUpType;
 	public int dropOffType;
 	
