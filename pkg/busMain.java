@@ -140,6 +140,8 @@ public class busMain <Value> {
 
 				System.out.println("Thank you for selecting option 1");
 				System.out.println("Please enter your starting stop or type mainpage to return to the main menu");
+				
+				finishedPart1 = false;
 				while (!finishedPart1)
 				{
 					String stopLookingFor = input.next();
@@ -158,13 +160,15 @@ public class busMain <Value> {
 								{
 									System.out.println("The distance to the distance between these points is " + dijkstra.distTo(finalStop));
 									System.out.println("The path to this stop is " + dijkstra.pathTo(finalStop, stops));
+									System.out.print("The details of the final stop are as follows \n");
 									for (int i =0; i < stops.size(); i++)
 									{
 										if (stops.get(i).stopID == finalStop)
 										{
-											System.out.println(stops.get(i).stopID);
-											System.out.println(stops.get(i).stopName);
-											System.out.println(stops.get(i).stopDesc);
+											System.out.println("");
+											System.out.println("Stop ID: " + stops.get(i).stopID);
+											System.out.println("Stop Name: " + stops.get(i).stopName);
+											System.out.println("Stop Description: " + stops.get(i).stopDesc);
 											System.out.println("");
 										}
 									}
@@ -178,7 +182,16 @@ public class busMain <Value> {
 								}
 							}
 							else
-								System.out.print("invalid stop");
+							{
+								System.out.print("invalid stop \n");
+								//input.nextLine();
+							}
+							
+						}
+						else
+						{
+							System.out.print("invalid stop\nPlease enter a valid stop \n");
+							input.nextLine();
 						}
 					}
 					else if (stopLookingFor.equals("mainpage"))
@@ -189,6 +202,7 @@ public class busMain <Value> {
 			}
 			else if (answer.equals("2"))
 			{
+				finishedPart2 = false;
 				while (!finishedPart2)
 				{
 					System.out.println("Thank you for choosing option 2");
@@ -221,6 +235,7 @@ public class busMain <Value> {
 			
 			else if (answer.equals("3"))
 			{
+				finishedPart3 = false;
 				while (!finishedPart3)
 				{
 					boolean correctStartTime = false;
@@ -232,6 +247,7 @@ public class busMain <Value> {
 						String startTime = input.next();
 						if (startTime.equals("mainpage"))
 						{
+							correctStartTime = true;
 							finishedPart3 = true;
 						}
 						else
@@ -239,7 +255,7 @@ public class busMain <Value> {
 							String startTimeCheck = timeCheck(startTime);
 							if (startTimeCheck == "-1")
 							{
-								System.out.print("Please enter a valid start time or type quit\n");
+								System.out.print("Please enter a valid start time or type mainpage to return to the main menu\n");
 								input.nextLine();
 							}
 							else 
@@ -268,11 +284,6 @@ public class busMain <Value> {
 						}	
 					}
 				}
-			}
-			else if (input.next() == "quit")
-			{
-				System.out.print("goodbye");
-				finished = true;
 			}
 			else
 			{

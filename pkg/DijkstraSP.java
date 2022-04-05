@@ -64,9 +64,9 @@ public class DijkstraSP
         	{
         		if (stopList.get(i).stopID == stopID.get(j))
         		{
-        			System.out.println(stopList.get(i).stopID);
-        			System.out.println(stopList.get(i).stopName);
-        			System.out.println(stopList.get(i).stopDesc);
+        			System.out.println("Stop ID: " + stopList.get(i).stopID);
+        			System.out.println("Stop Name: " + stopList.get(i).stopName);
+        			System.out.println("Stop Description: " + stopList.get(i).stopDesc);
         			System.out.println("");
         		}
         	}
