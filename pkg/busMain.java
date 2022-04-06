@@ -89,6 +89,7 @@ public class busMain <Value> {
 	    									stopSeq, pickUpType, dropOffType));
 	    	            }
 	  				}
+	  			//System.out.println(timeArriv);
 	    		}
 	    	}
 		
@@ -288,12 +289,12 @@ public class busMain <Value> {
 			else
 			{
 				System.out.print("Please enter a valid option\n");
-				input.next();
+				//input.next();
 			}
 		
 		}
 	}
-	public static ArrayList<busStopTimes> insertionSortStopTimes (ArrayList<busStopTimes> stopTimes)   
+	public static ArrayList<busStopTimes> insertionSortStopTimes (ArrayList<busStopTimes> stopTimes) 
 	{
 		for (int j = 1; j < stopTimes.size(); j++) 
 		{
@@ -309,22 +310,34 @@ public class busMain <Value> {
 		return stopTimes;
 	}
 	
+	public static boolean charCompare (String time)
+	{
+		char ch1 = '1';
+		char ch2 = '2';
+		char chTime = time.charAt(0);
+		if ((chTime==ch1) || (chTime==ch2))
+		{
+			return true;
+		}
+		else return false;
+	}
+	
 	public static String timeCheck (String timeInputted)
 	{
 		String updatedTime;
 		if (timeInputted.length() < 8 || timeInputted.length()>8)
 		{
-			System.out.print("Invalid time\n");
+			//System.out.print("Invalid time\n");
 			return "-1";
 		}
-		else if (timeInputted.charAt(0) == 1 || timeInputted.charAt(0) == 2)
+		if (charCompare(timeInputted) == true)
 		{
 			if (isValidTime(timeInputted))
 			{
 				return timeInputted;
 			}
 			else 
-				System.out.print("Invalid time\n");
+				//System.out.print("Invalid time\n");
 				return "-1";
 		}
 		else 
@@ -335,7 +348,7 @@ public class busMain <Value> {
 				return updatedTime;
 			}
 			else 
-				System.out.print("Invalid time\n");
+				//System.out.print("Invalid time\n");
 				return "-1";
 		}
 		
